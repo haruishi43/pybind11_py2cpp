@@ -1,3 +1,6 @@
+cv_numpu_conversion/build
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
