@@ -28,7 +28,8 @@ process_single_channel_image(Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynam
     using Eigen::RowMajor;
     using Eigen::Unaligned;
     c1_stride stride(cv_dst_img.cols, 1);
-    auto dst_img = Eigen::Map<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, Unaligned, c1_stride>(reinterpret_cast<uint8_t*>(cv_dst_img.data), cv_dst_img.rows, cv_dst_img.cols, stride);
+    auto dst_img = Eigen::Map<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, Unaligned, c1_stride>(
+        reinterpret_cast<uint8_t*>(cv_dst_img.data), cv_dst_img.rows, cv_dst_img.cols, stride);
 
     return dst_img;
 }

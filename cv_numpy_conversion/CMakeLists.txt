@@ -17,7 +17,6 @@ find_package(OpenCV REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 set( DEPENDENCIES ${OpenCV_LIBS} ${EIGEN3_INCLUDE_DIRS} )
-# link_directories(${DEPENDENCIES})
 
 # set(PYBIND11_CPP_STANDARD -std=c++11)
 add_subdirectory("${process_in_cpp_SOURCE_DIR}/../pybind11" "${process_in_cpp_SOURCE_DIR}/../pybind11/build")
