@@ -30,8 +30,11 @@ else:
 if build:
     print("Configuring...")
     mkdir_p("build")
-    subprocess.Popen(["cmake", "..",
-                      "-DCMAKE_BUILD_TYPE=Release"],
+    subprocess.Popen(["cmake",
+                      "-DPYTHON_EXECUTABLE=~/.pyenv/versions/anaconda3-5.2.0/bin/python",
+                      "-DCMAKE_BUILD_TYPE=Release", 
+                      ".."
+                      ],
                      cwd="build").wait()
     print("Compiling extension...")
     subprocess.Popen(["make", "-j4"], cwd="build").wait()
