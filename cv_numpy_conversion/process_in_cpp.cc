@@ -9,8 +9,14 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/eigen.hpp>
 
-//Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
-void process_single_channel_image(std::array<Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>, 3> src_img) {
+using namespace std;
+
+using Eigen::Dynamic;
+using Eigen::RowMajor;
+using Eigen::Unaligned;
+
+array<Eigen::Matrix<uint8_t, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>, 3>
+process_single_channel_image(array<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, 3> src_img) {
     // convert to cv::Mat
     cv::Mat rgb[3];
     cv::Mat cv_src_img(src_img[0].rows(), src_img[0].cols(), CV_8UC3);
@@ -23,22 +29,31 @@ void process_single_channel_image(std::array<Eigen::Matrix<uint8_t, Eigen::Dynam
     cv::imshow("window_cpp_1", cv_src_img);
     cv::waitKey();
 
-    // cv::Mat cv_dst_img;
-    // cv::rotate(cv_src_img, cv_dst_img, cv::ROTATE_90_CLOCKWISE);
 
-    // cv::imshow("window_cpp_1", cv_dst_img);
-    // cv::waitKey();
+    // do something with the image!
 
-    // // convert to Eigen::Matrix
-    // using c1_stride = Eigen::Stride<Eigen::Dynamic, 1>;
-    // using Eigen::Dynamic;
-    // using Eigen::RowMajor;
-    // using Eigen::Unaligned;
-    // c1_stride stride(cv_dst_img.cols, 1);
-    // auto dst_img = Eigen::Map<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, Unaligned, c1_stride>(
-    //     reinterpret_cast<uint8_t*>(cv_dst_img.data), cv_dst_img.rows, cv_dst_img.cols, stride);
+    cv::Mat cv_dst_img;
+    cv::rotate(cv_src_img, cv_dst_img, cv::ROTATE_90_CLOCKWISE);
 
-    // return dst_img;
+    cv::imshow("window_cpp_1", cv_dst_img);
+    cv::waitKey();
+    
+
+    // convert to Eigen::Matrix
+    cv::Mat split_img[3];
+    cv::split(cv_dst_img, split_img);
+
+    array<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, 3> dst_array;
+    using channel_stride = Eigen::Stride<Dynamic, 1>;
+
+    for (int i=0;i<dst_array.size();i++)
+    {
+        channel_stride stride(split_img[i].cols, 1);
+        auto channel_matrix = Eigen::Map<Eigen::Matrix<uint8_t, Dynamic, Dynamic, RowMajor>, Unaligned, channel_stride>(
+            reinterpret_cast<uint8_t*>(split_img[i].data), split_img[i].rows, split_img[i].cols, stride);
+        dst_array[i] = channel_matrix;
+    }
+    return dst_array;
 }
 
 PYBIND11_MODULE(process_in_cpp, m) {

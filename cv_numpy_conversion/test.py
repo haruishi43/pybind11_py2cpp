@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import process_in_cpp
 
 src_img = cv2.imread("./pano.jpg")
@@ -19,5 +20,9 @@ print(type(arr))
 print(type(arr[0]))
 
 dst_img = process_in_cpp.process_single_channel_image(arr)
-# cv2.imshow("window_python_2", dst_img)
-# cv2.waitKey()
+
+rarr = np.array([dst_img[0], dst_img[1], dst_img[2]])
+rarr = np.rollaxis(rarr, 0, 3)
+
+cv2.imshow("window_python_2", rarr)
+cv2.waitKey()
