@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import process_in_cpp
 
-src_img = cv2.imread("./pano.jpg")
+src_img = cv2.imread("./data/pano.jpg")
 src_img = src_img[:, :, :]
 
 print(type(src_img))
